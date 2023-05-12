@@ -1,0 +1,8 @@
+<input type="text" pInputText [(ngModel)]="key" class="w-full" placeholder="Ingresar clave de google translate" id="key"
+(keydown)="handleKey($event)">
+<p-divider></p-divider>
+<div class="flex justify-content-between mt-4">
+  <button pButton pRipple class="p-button-secondary" label="Cancelar" (click)="close()"></button>
+  <button pButton pRipple class="p-button-primary" label="Aceptar" icon="pi pi-check" (click)="process()"
+  [disabled]="!key" [loading]="testing"></button>
+</div>

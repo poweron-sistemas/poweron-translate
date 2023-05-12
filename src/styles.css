@@ -1,1 +1,99 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  font-family: var(--font-family);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.p-splitter {
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  height: calc(100% - 45px);
+}
+.p-splitter .p-splitter-panel {
+  flex-direction: column;
+  overflow: auto;
+}
+
+.p-menubar {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  padding: 0;
+  height: 45px;
+}
+.p-menubar .p-menuitem .p-menuitem-link {
+  border-radius: 0!important;
+}
+.p-menubar .p-menuitem.active {
+  background-color: var(--primary-color);
+}
+.p-menubar .p-menuitem.active .p-menuitem-icon,
+.p-menubar .p-menuitem.active .p-menuitem-text {
+  color: var(--primary-color-text);
+}
+
+.p-fileupload .p-fileupload-content,
+.p-fileupload .p-fileupload-buttonbar {
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+.p-fileupload .p-fileupload-buttonbar {
+  padding-bottom: .5rem;
+}
+.p-fileupload .p-fileupload-content .p-progressbar {
+  display: none;
+}
+
+.p-tree {
+  padding: 0!important;
+  height: 100%;
+  border: 0;
+}
+.p-tree .p-treenode {
+  font-size: .8rem;
+}
+.p-tree .p-treenode .p-tree-toggler {
+  width: 1rem!important;
+  height: 1rem!important;
+}
+.p-tree .p-treenode .p-tree-toggler .p-tree-toggler-icon {
+  font-size: .8rem;
+}
+.p-tree .p-tree-filter {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.p-tree .p-tree-filter-container {
+  margin: 0;
+  height: 37px;
+}
+.p-tree .p-tree-wrapper {
+  height: calc(100% - 37px);
+  padding-top: 5px;
+}
+.p-tree .p-treenode-content {
+  padding: .2rem!important;
+}
+.p-tree .p-treenode-label {
+  flex: 1;
+}
+.p-tree .p-treenode.po-cutted .p-treenode-label {
+  opacity: .5;
+}
+.p-breadcrumb {
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+a {
+  color: var(--primary-color);
+}

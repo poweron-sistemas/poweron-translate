@@ -1,6 +1,6 @@
-# PoweronTranslate
+# Poweron Translate
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.2.
+Sistema de traducción para archivos json principalmente para usar con ngx-translateng
 
 ## Development server
 

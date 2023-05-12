@@ -1,0 +1,90 @@
+<p-menubar [model]="menu"></p-menubar>
+<p-splitter [panelSizes]="splitterSizes['main']" (onResizeEnd)="handleResize('main', $event)">
+  <ng-template pTemplate>
+    <div class="col flex flex-column align-items-center justify-content-center" *ngIf="translations.length == 0">
+      <i class="pi pi-info-circle text-4xl text-200"></i>
+      <h4 class="text-300 font-bold mt-2" *ngIf="!principal">No hay idiomas</h4>
+      <h4 class="text-300 font-bold mt-2" *ngIf="principal">No hay traducciones</h4>
+    </div>
+    <p-tree [value]="translations" [filter]="true" filterPlaceholder="Búsqueda rápida" class="h-full" (keydown.delete)="removeLabel()"
+    (keydown.F2)="editLabel()" (keydown.control.x)="cutLabel()" (keydown.control.c)="copyLabel()" (keydown.control.v)="pasteLabel()"
+    (keydown.ArrowRight)="focusPrincipalLanguage($event)" *ngIf="translations.length > 0"
+      selectionMode="multiple" [(selection)]="selected" (onNodeSelect)="handleSelection()" [contextMenu]="cm" filterBy="label,data,key"
+      [draggableNodes]="true" [droppableNodes]="true" draggableScope="self" droppableScope="self">
+      <ng-template pTemplate="edit" let-node>
+        <input class="p-0 w-full" pInputText [(ngModel)]="node.label" style="font-size: .8rem"
+        (blur)="processEdit()" (keydown)="handleEditInput($event)" id="editLabel">
+      </ng-template>
+      <ng-template let-node pTemplate="default">
+        <div (dblclick)="editLabel()">{{ node.label }}</div>
+      </ng-template>
+    </p-tree>
+  </ng-template>
+  <ng-template pTemplate>
+    <p-splitter [panelSizes]="splitterSizes['content']" class="h-full" styleClass="h-full" layout="vertical"
+    (onResizeEnd)="handleResize('content', $event)">
+      <ng-template pTemplate>
+        <div class="col flex flex-column align-items-center justify-content-center" *ngIf="selected.length == 0">
+          <i class="pi pi-file text-8xl text-200"></i>
+          <h3 class="text-300 font-bold">Seleccione un elemento</h3>
+        </div>
+        <ng-container *ngIf="selected.length > 0">
+          <div class="po-translations-title mb-3">
+            Traducciones
+          </div>
+          <ng-container *ngFor="let item of translationFields; let i = index">
+            <p-breadcrumb class="w-full" [model]="item.breadcrumb"></p-breadcrumb>
+            <ng-container *ngIf="translationFields.length == 1 && item.node.children.length == 0">
+              <div class="flex align-content-center p-2" *ngFor="let f of item.translations">
+                <div class="w-4rem p-1">
+                  {{ f.lng }}
+                </div>
+                <div class="flex-1">
+                  <textarea pInputTextarea [autoResize]="true" [(ngModel)]="f.value[item.label]" *ngIf="f.value"
+                  class="w-full" [class.principal-language]="f.lng == principal"
+                  (change)="handleTranslation(f.lng)" (focus)="suggestTranslation(f)" [rows]="1" [id]="f.id"
+                  (keydown.control.1)="handleTranslated($event, f)"
+                  ></textarea>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="po-translations-title mb-3 flex gap-2 align-items-center justify-content-between">
+          <div>
+            <i class="pi pi-google"></i>
+            Traductor de Google
+          </div>
+          <p-checkbox [(ngModel)]="capitalizeTranslations" [binary]="true" label="Capitalizar" (onChange)="handleCapitalize()"></p-checkbox>
+        </div>
+        <div class="p-3" *ngIf="!googleConfigured">
+          <i class="pi pi-exclamation-circle text-orange-500"></i>
+          Google Translate API KEY sin configurar.
+          <a class="cursor-pointer" (click)="configureGoogle()">Configurar</a>
+        </div>
+        <div class="flex flex-column gap-2" *ngIf="suggesting">
+          <div class="p-2 flex gap-3 align-items-center">
+            <p-skeleton width="12rem"></p-skeleton>
+          </div>
+          <div class="p-2 flex gap-3 align-items-center">
+            <p-skeleton width="10rem"></p-skeleton>
+          </div>
+        </div>
+        <div class="flex flex-column" *ngIf="!suggesting">
+          <div class="p-1 flex gap-3 align-items-center" *ngFor="let suggestion of suggestions; let i = index">
+            <span class="p-tag p-tag-success w-4rem">
+              CTRL + {{ i + 1 }}
+            </span>
+            <code [innerText]="suggestion.translatedText" class="flex-1">
+            </code>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </ng-template>
+</p-splitter>
+<p-toast ></p-toast>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
+<p-confirmDialog></p-confirmDialog>

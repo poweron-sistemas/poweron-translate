@@ -1,0 +1,5 @@
+.po-translations-title {
+  height: 37px;
+  border-bottom: 1px var(--surface-c) solid;
+  padding: 6px;
+}
