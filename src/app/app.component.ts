@@ -192,6 +192,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private getTranslationSuggestions(translation: POTTranslation, q: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       if (this.translationProvider?.name == 'google') {
+        this.googleTranslateService.configure(this.translationProvider);
         const request = { q, target: translation.code, source: this.project?.primary as string, format: 'text' };
         this.googleTranslateService.translate(request).subscribe({
           next: response => {
@@ -249,31 +250,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public configureLanguages(): void {
-    /*
-    const ref = this.dialogService.open(LanguagesComponent, {
-      header: 'Configuración de idiomas',
-      width: '550px',
-      data: {
-        files: this.project.files,
-        principal: this.project.primary
-      }
-    });
-
-    ref.onClose.subscribe({
-      next: result => {
-        if (result) {
-          this.project.files = result.files;
-          this.project.primary = result.principal;
-          this.update();
-        }
-      }
-    });
-    */
-  }
-
   public showSettings(): void {
-
+    this.menuService.handle('trigger', 'settings');
   }
 
   public handleResize(panel: 'main' | 'content', event: any): void {
