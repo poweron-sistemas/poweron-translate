@@ -1,90 +1,120 @@
-<p-menubar [model]="menu"></p-menubar>
-<p-splitter [panelSizes]="splitterSizes['main']" (onResizeEnd)="handleResize('main', $event)">
-  <ng-template pTemplate>
-    <div class="col flex flex-column align-items-center justify-content-center" *ngIf="translations.length == 0">
-      <i class="pi pi-info-circle text-4xl text-200"></i>
-      <h4 class="text-300 font-bold mt-2" *ngIf="!principal">No hay idiomas</h4>
-      <h4 class="text-300 font-bold mt-2" *ngIf="principal">No hay traducciones</h4>
+<app-menu></app-menu>
+<div class="po-container">
+  <div class="col flex flex-column align-items-center justify-content-center" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  <div [class.hidden]="project || loading" [class.flex]="!project && !loading" class="col flex-column align-items-center justify-content-center" >
+    <div class="p-card p-2 w-30rem h-20rem">
+      <div class="p-card-title text-center">
+        <img src="/assets/img/logo.png" width="64"><br>
+        Bienvenido a PowerOn Translate
+      </div>
+      <ul class="list-none">
+        <li>
+          <a (click)="open()" class="flex">
+            <div class="w-2rem">
+              <i class="fas fa-folder-open"></i>
+            </div>
+            Abrir un proyecto existente
+          </a>
+        </li>
+        <li>
+          <a (click)="create()" class="flex">
+            <div class="w-2rem">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            Comenzar un proyecto nuevo
+          </a>
+        </li>
+      </ul>
+      <ul class="list-none">
+        <li>
+          <a href="https://www.poweronsistemas.com" class="flex">
+            <div class="w-2rem">
+              <i class="fas fa-external-link-alt"></i>
+            </div>
+            Sobre nosotros...
+          </a>
+        </li>
+        <li>
+          <a href="https://www.github.com/poweron-sistemas" class="flex">
+            <div class="w-2rem">
+              <i class="fas fa-external-link-alt"></i>
+            </div>
+            Repositorio
+          </a>
+        </li>
+      </ul>
     </div>
-    <p-tree [value]="translations" [filter]="true" filterPlaceholder="Búsqueda rápida" class="h-full" (keydown.delete)="removeLabel()"
-    (keydown.F2)="editLabel()" (keydown.control.x)="cutLabel()" (keydown.control.c)="copyLabel()" (keydown.control.v)="pasteLabel()"
-    (keydown.ArrowRight)="focusPrincipalLanguage($event)" *ngIf="translations.length > 0"
-      selectionMode="multiple" [(selection)]="selected" (onNodeSelect)="handleSelection()" [contextMenu]="cm" filterBy="label,data,key"
-      [draggableNodes]="true" [droppableNodes]="true" draggableScope="self" droppableScope="self">
-      <ng-template pTemplate="edit" let-node>
-        <input class="p-0 w-full" pInputText [(ngModel)]="node.label" style="font-size: .8rem"
-        (blur)="processEdit()" (keydown)="handleEditInput($event)" id="editLabel">
-      </ng-template>
-      <ng-template let-node pTemplate="default">
-        <div (dblclick)="editLabel()">{{ node.label }}</div>
-      </ng-template>
-    </p-tree>
-  </ng-template>
-  <ng-template pTemplate>
-    <p-splitter [panelSizes]="splitterSizes['content']" class="h-full" styleClass="h-full" layout="vertical"
-    (onResizeEnd)="handleResize('content', $event)">
-      <ng-template pTemplate>
-        <div class="col flex flex-column align-items-center justify-content-center" *ngIf="selected.length == 0">
-          <i class="pi pi-file text-8xl text-200"></i>
-          <h3 class="text-300 font-bold">Seleccione un elemento</h3>
-        </div>
-        <ng-container *ngIf="selected.length > 0">
-          <div class="po-translations-title mb-3">
-            Traducciones
+  </div>
+  <p-splitter class="w-full" [class.hidden]="!project || loading" [panelSizes]="settings?.splitters?.main || []"
+  (onResizeEnd)="handleResize('main', $event)">
+    <ng-template pTemplate>
+      <app-nodes></app-nodes>
+    </ng-template>
+    <ng-template pTemplate>
+      <p-splitter [panelSizes]="settings?.splitters?.content || []"  class="h-full" styleClass="h-full" layout="vertical"
+      (onResizeEnd)="handleResize('content', $event)">
+        <ng-template pTemplate>
+          <div class="col flex flex-column align-items-center justify-content-center" *ngIf="!loading && selection.length == 0">
+            <i class="pi pi-file text-8xl text-200"></i>
+            <h3 class="text-300 font-bold">Seleccione un elemento</h3>
           </div>
-          <ng-container *ngFor="let item of translationFields; let i = index">
-            <p-breadcrumb class="w-full" [model]="item.breadcrumb"></p-breadcrumb>
-            <ng-container *ngIf="translationFields.length == 1 && item.node.children.length == 0">
-              <div class="flex align-content-center p-2" *ngFor="let f of item.translations">
-                <div class="w-4rem p-1">
-                  {{ f.lng }}
+          <ng-container *ngIf="!loading && selection.length > 0">
+            <div class="po-translations-title mb-3">
+              Traducciones
+            </div>
+            <ng-container *ngFor="let node of selection; let i = index">
+              <p-breadcrumb class="w-full" [model]="breadcrumb" *ngFor="let breadcrumb of node.data.breadcrumbs"></p-breadcrumb>
+              <ng-container *ngIf="selection.length == 1">
+                <div class="flex align-content-center p-2" *ngFor="let translation of node.data.translations">
+                  <div class="w-4rem p-1">
+                    {{ translation.code }}
+                  </div>
+                  <div class="flex-1">
+                    <textarea pInputTextarea [autoResize]="true" class="w-full" [class.principal-language]="translation.code == project?.primary"
+                      (change)="handleTranslation(translation, node)" (focus)="suggestTranslation(translation, node)" [rows]="1"
+                      [id]="'lng-' + translation.code" (keydown.control.1)="handleTranslated($event, translation)" [(ngModel)]="translation.value">
+                    </textarea>
+                  </div>
                 </div>
-                <div class="flex-1">
-                  <textarea pInputTextarea [autoResize]="true" [(ngModel)]="f.value[item.label]" *ngIf="f.value"
-                  class="w-full" [class.principal-language]="f.lng == principal"
-                  (change)="handleTranslation(f.lng)" (focus)="suggestTranslation(f)" [rows]="1" [id]="f.id"
-                  (keydown.control.1)="handleTranslated($event, f)"
-                  ></textarea>
-                </div>
-              </div>
+              </ng-container>
             </ng-container>
           </ng-container>
-        </ng-container>
-      </ng-template>
-      <ng-template pTemplate>
-        <div class="po-translations-title mb-3 flex gap-2 align-items-center justify-content-between">
-          <div>
-            <i class="pi pi-google"></i>
-            Traductor de Google
+        </ng-template>
+        <ng-template pTemplate>
+          <div class="col flex flex-column align-items-center justify-content-center p-3"
+          *ngIf="!settings?.translationProviders?.length">
+            <i class="pi pi-exclamation-circle text-orange-500 text-4xl"></i>
+            Proveedor de traducción sin configurar
+            <a class="cursor-pointer" (click)="showSettings()">Configurar</a>
           </div>
-          <p-checkbox [(ngModel)]="capitalizeTranslations" [binary]="true" label="Capitalizar" (onChange)="handleCapitalize()"></p-checkbox>
-        </div>
-        <div class="p-3" *ngIf="!googleConfigured">
-          <i class="pi pi-exclamation-circle text-orange-500"></i>
-          Google Translate API KEY sin configurar.
-          <a class="cursor-pointer" (click)="configureGoogle()">Configurar</a>
-        </div>
-        <div class="flex flex-column gap-2" *ngIf="suggesting">
-          <div class="p-2 flex gap-3 align-items-center">
-            <p-skeleton width="12rem"></p-skeleton>
-          </div>
-          <div class="p-2 flex gap-3 align-items-center">
-            <p-skeleton width="10rem"></p-skeleton>
-          </div>
-        </div>
-        <div class="flex flex-column" *ngIf="!suggesting">
-          <div class="p-1 flex gap-3 align-items-center" *ngFor="let suggestion of suggestions; let i = index">
-            <span class="p-tag p-tag-success w-4rem">
-              CTRL + {{ i + 1 }}
-            </span>
-            <code [innerText]="suggestion.translatedText" class="flex-1">
-            </code>
-          </div>
-        </div>
-      </ng-template>
-    </p-splitter>
-  </ng-template>
-</p-splitter>
+          <p-tabView styleClass="po-translation-provider-tab" *ngIf="settings?.translationProviders && settings?.translationProviders?.length">
+            <p-tabPanel [header]="provider.name.toUpperCase()" class="flex-1" *ngFor="let provider of settings?.translationProviders">
+              <div class="flex flex-column gap-2" *ngIf="suggesting">
+                <div class="p-2 flex gap-3 align-items-center">
+                  <p-skeleton width="12rem"></p-skeleton>
+                </div>
+                <div class="p-2 flex gap-3 align-items-center">
+                  <p-skeleton width="10rem"></p-skeleton>
+                </div>
+              </div>
+              <div class="flex flex-column" *ngIf="!suggesting">
+                <div class="p-1 flex gap-3 align-items-center" *ngFor="let suggestion of suggestions; let i = index">
+                  <span class="p-tag p-tag-success w-4rem">
+                    CTRL + {{ i + 1 }}
+                  </span>
+                  <code [innerText]="suggestion" class="flex-1">
+                  </code>
+                </div>
+              </div>
+              <em *ngIf="!suggesting && !suggestions.length">Seleccione un campo para sugerir traducciones</em>
+            </p-tabPanel>
+          </p-tabView>
+        </ng-template>
+      </p-splitter>
+    </ng-template>
+  </p-splitter>
+</div>
 <p-toast ></p-toast>
-<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 <p-confirmDialog></p-confirmDialog>

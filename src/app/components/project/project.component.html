@@ -1,0 +1,71 @@
+<form [formGroup]="fg" class="formgrid" (ngSubmit)="process()">
+  <div class="field">
+    <label for="name">Nombre del proyecto</label>
+    <input type="text" pInputText class="w-full" placeholder="Ingrese el nombre del proyecto" id="name"
+    formControlName="name">
+    <small class="p-error" *ngIf="fg.get('name')?.invalid && fg.get('name')?.touched">
+      {{ fg.get('name')?.hasError('required') ? 'Este campo es obligatorio' : 'El nombre debe tener entre 3 y 12 caracteres.' }}
+    </small>
+  </div>
+  <div class="field" formArrayName="languages">
+    <label>
+      Idiomas |
+      <a (click)="addLanguage()"><i class="fas fa-plus-circle"></i> Agregar</a> |
+      <a (click)="importLanguage()"><i class="fas fa-file-import"></i> Importar</a>
+    </label>
+    <p-table [value]="languages.controls" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th width="230">Idioma</th>
+          <th width="auto">Archivo</th>
+          <th width="70"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lng let-i="rowIndex">
+        <tr [formGroupName]="i">
+          <td>
+            <p-dropdown [options]="languagesOptions" optionLabel="name" optionValue="code" [filter]="true" filterBy="name" formControlName="code"
+            appendTo="body" placeholder="Selecione un idioma" styleClass="w-full" (onChange)="handleLanguage(i)"></p-dropdown>
+            <small class="p-error" *ngIf="lng.get('code')?.invalid && lng.get('code')?.touched">
+              Este campo es obligatorio
+            </small>
+          </td>
+          <td>
+            {{ lng.get('file')?.value || '' }}
+            <small class="p-error" *ngIf="lng.get('file')?.invalid && lng.get('file')?.touched">
+              Este campo es obligatorio
+            </small>
+          </td>
+          <td>
+            <button pButton class="p-button-danger" icon="pi pi-trash" title="Eliminar" (click)="removeLanguage(i)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3">
+            <div>Agregue un idioma para configurarlo</div>
+            <small class="p-error" *ngIf="fg.get('languages')?.invalid && fg.get('languages')?.touched">
+              Debe cargar por lo menos un idioma
+            </small>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="field">
+    <label for="primary" class="mb-2">Idioma principal</label>
+    <p-dropdown [options]="languages.value" optionLabel="code" optionValue="code" formControlName="primary"
+      appendTo="body" styleClass="w-full" placeholder="Seleccione el idioma principal">
+    </p-dropdown>
+    <small class="p-error" *ngIf="fg.get('primary')?.invalid && fg.get('primary')?.touched">
+      Este campo es obligatorio
+    </small>
+  </div>
+  <p-divider></p-divider>
+  <div class="flex justify-content-between mt-4">
+    <button pButton pRipple class="p-button-secondary" label="Cancelar" (click)="close()" type="button"></button>
+    <button pButton pRipple class="p-button-primary" label="Aceptar" icon="pi pi-check" type="submit"></button>
+  </div>
+</form>
+<input type="file" id="inputFile" accept=".json" multiple="true" (change)="handleImportedFile($event)">

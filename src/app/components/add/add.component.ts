@@ -1,5 +1,4 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
-import { TreeNode } from 'primeng/api';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -7,17 +6,16 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.css']
 })
-export class AddComponent implements OnInit, AfterContentInit {
-  public value!: string;
+export class AddComponent implements OnInit, AfterViewInit {
+  public address!: string;
 
   constructor(private cfg: DynamicDialogConfig, private ref: DynamicDialogRef) {}
 
   public ngOnInit(): void {
-    const selected: TreeNode = this.cfg.data?.selected;
-    this.value = selected ? selected.key + '.' : '';
+    this.address = this.cfg.data?.address ? (this.cfg.data?.address + '.') : '';
   }
 
-  public ngAfterContentInit(): void {
+  public ngAfterViewInit(): void {
     setTimeout(() => {
       document.getElementById('translationId')?.focus();
     }, 100);
@@ -34,9 +32,10 @@ export class AddComponent implements OnInit, AfterContentInit {
   }
 
   public process(): void {
-    if (!this.value) {
+    if (!this.address) {
       return;
     }
-    this.ref.close(this.value);
+
+    this.ref.close(this.address.split('.').filter(a => a));
   }
 }

@@ -1,0 +1,8 @@
+<p-menubar [model]="menu" class="po-main-menu" [styleClass]="update ? 'po-hidden' : ''">
+  <ng-template pTemplate="start">
+    <div class="po-main-logo">
+      <img src="/assets/img/logo.png" title="PowerOn Translate"/>
+    </div>
+  </ng-template>
+</p-menubar>
+<input type="file" name="file" accept=".pot" (change)="handleOpen($event)" id="fileOpenInput">

@@ -6,19 +6,65 @@ body {
   width: 100%;
   height: 100%;
 }
-
+input[type="file"] {
+  display: none;
+}
 .p-splitter {
   border: 0;
   border-radius: 0;
   background-color: transparent;
-  height: calc(100% - 45px);
+  height: 100%;
 }
 .p-splitter .p-splitter-panel {
   flex-direction: column;
   overflow: auto;
 }
 
-.p-menubar {
+.po-main-menu .p-menubar {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  padding: 0;
+  height: 3.5rem;
+  font-size: 1.2rem;
+}
+.po-main-menu .po-main-logo {
+  width: 3em;
+  padding: .3em;
+  margin-right: .6em;
+}
+.po-main-menu .po-main-logo img {
+  width: 100%;
+}
+.po-main-menu .p-menubar p-menubarsub {
+  display: contents;
+}
+.po-main-menu .p-menubar .p-menubar-root-list {
+  height: 100%;
+  width: 100%;
+}
+.po-main-menu .p-menubar .p-menuitem {
+  height: 100%;
+  display: flex;
+}
+.po-main-menu .p-menubar .p-menuitem .p-menuitem-link {
+  border-radius: 0!important;
+  width: 3em;
+  padding: 0;
+}
+.po-main-menu .p-menubar .p-menuitem .p-menuitem-icon {
+  font-size: 1.5em;
+  margin: auto!important;
+}
+.po-main-menu .p-menubar .p-menu-separator {
+  border: none;
+  clear: none;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.po-sape .p-menubar {
   border-radius: 0;
   border-left: 0;
   border-right: 0;
@@ -26,14 +72,14 @@ body {
   padding: 0;
   height: 45px;
 }
-.p-menubar .p-menuitem .p-menuitem-link {
+.po-sape .p-menubar .p-menuitem .p-menuitem-link {
   border-radius: 0!important;
 }
-.p-menubar .p-menuitem.active {
+.po-sape .p-menubar .p-menuitem.active {
   background-color: var(--primary-color);
 }
-.p-menubar .p-menuitem.active .p-menuitem-icon,
-.p-menubar .p-menuitem.active .p-menuitem-text {
+.po-sape .p-menubar .p-menuitem.active .p-menuitem-icon,
+.po-sape .p-menubar .p-menuitem.active .p-menuitem-text {
   color: var(--primary-color-text);
 }
 
@@ -96,4 +142,26 @@ body {
 }
 a {
   color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.po-hidden {
+  opacity: 1;
+}
+.po-translation-provider-tab {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.po-translation-provider-tab .p-tabview-nav-content {
+  padding: .5rem .5rem 0;
+}
+.po-translation-provider-tab .p-tabview-panels {
+  flex: 1;
+  border-left: 0;
+  border-bottom: 0;
+  border-right: 0;
 }

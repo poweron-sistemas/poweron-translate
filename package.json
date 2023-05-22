@@ -1,6 +1,6 @@
 {
   "name": "poweron-translate",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -18,6 +18,9 @@
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "file-saver-es": "^2.0.5",
+    "jszip": "^3.10.1",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
     "primeng": "^16.0.0-rc.1",
@@ -29,6 +32,8 @@
     "@angular-devkit/build-angular": "^16.0.0",
     "@angular/cli": "~16.0.0",
     "@angular/compiler-cli": "^16.0.0",
+    "@types/file-saver": "^2.0.5",
+    "@types/file-saver-es": "^2.0.1",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",

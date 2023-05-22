@@ -1,3 +1,8 @@
+.po-container {
+  width: 100%;
+  height: calc(100% - 3.5rem);
+  display: flex;
+}
 .po-translations-title {
   height: 37px;
   border-bottom: 1px var(--surface-c) solid;

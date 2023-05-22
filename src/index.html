@@ -2,13 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Poweron Translate v0.1</title>
+  <title>Poweron Translate</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="/assets/themes/nova/theme.css" id="themeApp">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/img/favicon/site.webmanifest">
+  <link rel="mask-icon" href="/assets/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="/assets/themes/light/theme.css" id="themeApp">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <style>
+      .lds-hourglass {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-hourglass:after {
+        content: " ";
+        display: block;
+        border-radius: 50%;
+        width: 0;
+        height: 0;
+        margin: 8px;
+        box-sizing: border-box;
+        border: 32px solid #fcf;
+        border-color: #fcf transparent #fcf transparent;
+        animation: lds-hourglass 1.2s infinite;
+      }
+      .po-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+      .po-content {
+        margin: auto;
+        text-align: center;
+      }
+      @keyframes lds-hourglass {
+        0% {
+          transform: rotate(0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+        50% {
+          transform: rotate(900deg);
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        100% {
+          transform: rotate(1800deg);
+        }
+      }
+    </style>
+    <div class="po-container">
+      <div class="po-content">
+        <div class="lds-hourglass"></div><br>
+          <strong>PowerOn Translate</strong><br>
+          Cargando...
+      </div>
+    </div>
+  </app-root>
 </body>
 </html>

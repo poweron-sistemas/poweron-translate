@@ -1,0 +1,22 @@
+<div class="col flex flex-column align-items-center justify-content-center" *ngIf="nodes.length == 0 && project?.languages?.length">
+  <i class="pi pi-info-circle text-6xl text-200"></i>
+  <div class="text-300 font-bold mt-2 text-2xl">No hay traducciones</div>
+  <a (click)="add()">
+    <i class="fas fa-comment-medical"></i>
+    Nuevo ID
+  </a>
+</div>
+<p-tree [value]="nodes" [filter]="true" filterPlaceholder="Búsqueda rápida [Control + K]" class="h-full" (keydown.delete)="remove()"
+(keydown.F2)="edit()" (keydown.control.x)="cut()" (keydown.control.c)="copy()" (keydown.control.v)="paste()"
+(keydown.ArrowRight)="focusPrimary($event)" *ngIf="nodes.length > 0" (onNodeContextMenuSelect)="handleContextMenu($event)"
+  selectionMode="multiple" [(selection)]="selection" (onNodeSelect)="handleSelection()" [contextMenu]="cm" filterBy="label,key"
+  [draggableNodes]="true" [droppableNodes]="true" draggableScope="self" droppableScope="self" (onNodeDrop)="handleDrop($event)">
+  <ng-template pTemplate="edit" let-node>
+    <input class="p-0 w-full" pInputText [(ngModel)]="node.label" style="font-size: .8rem"
+    (blur)="processEdit()" (keydown)="handleEditInput($event)" id="editLabel">
+  </ng-template>
+  <ng-template let-node pTemplate="default">
+    <div (dblclick)="edit()">{{ node.label }}</div>
+  </ng-template>
+</p-tree>
+<p-contextMenu #cm [model]="menu"></p-contextMenu>

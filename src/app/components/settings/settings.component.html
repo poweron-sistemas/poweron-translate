@@ -1,0 +1,77 @@
+<form [formGroup]="fg" class="formgrid" (ngSubmit)="process()">
+  <div class="field">
+    <label for="theme">Tema</label>
+    <p-dropdown [options]="themes" optionLabel="label" optionValue="value" formControlName="theme"
+      appendTo="body" placeholder="Selecione un tema" styleClass="w-full" (onChange)="handleTheme()">
+      <ng-template pTemplate="item" let-item>
+        <i [className]="item.icon + ' mr-1'"></i>
+        {{ item.label }}
+      </ng-template>
+      <ng-template pTemplate="selectedItem" let-item>
+        <i [className]="item.icon + ' mr-1'"></i>
+        {{ item.label }}
+      </ng-template>
+    </p-dropdown>
+    <small class="p-error" *ngIf="fg.get('theme')?.invalid && fg.get('theme')?.touched">
+      Este campo es obligatorio
+    </small>
+  </div>
+  <div class="field">
+    <label for="webhook">Webhook de subida</label>
+    <input pInputText class="w-full" formControlName="webhook" placeholder="Ingrese la URL de transmisión de archivos">
+  </div>
+  <div class="field" formArrayName="translationProviders">
+    <label>
+      Proveedores de traducciones |
+      <a (click)="addTranslationProvider()">
+        <i class="fas fa-plus-circle"></i>
+        Agregar
+      </a>
+    </label>
+    <p-table [value]="translationProviders.controls" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th width="100">Capitalizar</th>
+          <th width="240">Proveedor</th>
+          <th width="auto">API Key</th>
+          <th width="70"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lng let-i="rowIndex">
+        <tr [formGroupName]="i">
+          <td class="text-center">
+            <p-checkbox formControlName="capitalize" [binary]="true"></p-checkbox>
+          </td>
+          <td>
+            <p-dropdown [options]="translationProvidersOptions" optionLabel="label" optionValue="value" formControlName="name"
+            appendTo="body" placeholder="Selecione un proveedor" styleClass="w-full"></p-dropdown>
+            <small class="p-error" *ngIf="lng.get('name')?.invalid && lng.get('name')?.touched">
+              Este campo es obligatorio
+            </small>
+          </td>
+          <td>
+            <input type="text" pInputText formControlName="apiKey" placeholder="Ingrese la APY Key" class="w-full">
+            <small class="p-error" *ngIf="lng.get('apiKey')?.invalid && lng.get('apiKey')?.touched">
+              Este campo es obligatorio
+            </small>
+          </td>
+          <td>
+            <button pButton class="p-button-danger" icon="pi pi-trash" title="Eliminar" (click)="removeTranslationProvider(i)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3">
+            <div>Agregue un proveedor de traducciones para configurarlo</div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-divider></p-divider>
+  <div class="flex justify-content-between mt-4">
+    <button pButton pRipple class="p-button-secondary" label="Cancelar" (click)="close()" type="button"></button>
+    <button pButton pRipple class="p-button-primary" label="Aceptar" icon="pi pi-check" type="submit"></button>
+  </div>
+</form>

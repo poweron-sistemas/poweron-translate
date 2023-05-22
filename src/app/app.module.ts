@@ -7,11 +7,9 @@ import { MenubarModule } from 'primeng/menubar';
 import { TreeModule } from 'primeng/tree';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { LanguagesComponent } from './components/languages/languages.component';
-import { ImportComponent } from './components/import/import.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
@@ -21,18 +19,26 @@ import { AddComponent } from './components/add/add.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { GoogleTranslateComponent } from './components/google.translate/google.translate.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { TooltipModule } from 'primeng/tooltip';
+import { MenuComponent } from './components/menu/menu.component';
+import { NodesComponent } from './components/nodes/nodes.component';
+import { ProjectComponent } from './components/project/project.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LanguagesComponent,
-    ImportComponent,
     AddComponent,
-    GoogleTranslateComponent
+    MenuComponent,
+    NodesComponent,
+    ProjectComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +60,12 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     BreadcrumbModule,
     SkeletonModule,
     CheckboxModule,
-    RadioButtonModule
+    RadioButtonModule,
+    TooltipModule,
+    ReactiveFormsModule,
+    ProgressSpinnerModule,
+    TableModule,
+    TabViewModule
   ],
   providers: [MessageService, DialogService, ConfirmationService],
   bootstrap: [AppComponent]
